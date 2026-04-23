@@ -3,47 +3,13 @@
 #include "user/user.h"
 
 void
-str_rev(char *buff, int len)
-{
-  for(int idx = 0; idx < len / 2; idx++) {
-    char tmp = buff[idx];
-    buff[idx] = buff[len - 1 - idx];
-    buff[len - 1 - idx] = tmp;
-  }
-}
-
-int
-itoa(int n, char *dest)
-{
-  *dest = n % 10 + '0';
-  if(n < 10) {
-    return 1;
-  } else {
-    int past_len = itoa(n / 10, dest + 1);
-    return past_len + 1;
-  }
-}
-
-void
-print_int(int n)
-{
-  char buff[10];
-  int len = itoa(n, buff);
-  str_rev(buff, len);
-  write(1, buff, len);
-  write(1, "\n", 1);
-}
-
-void
 make_child(uint8 is_last, int up_pipe_fds[2], int down_pipe_fds[2], int current_number)
 {
-  write(1, "prime ", 6);
-  print_int(current_number);
+  printf("prime %d\n", current_number);
   close(up_pipe_fds[1]);
 
   int input;
   while(read(up_pipe_fds[0], &input, 4) != 0) {
-    // print_int(input);
     if(input % current_number != 0) {
       if(is_last) {
         is_last = 0;
@@ -69,7 +35,7 @@ make_child(uint8 is_last, int up_pipe_fds[2], int down_pipe_fds[2], int current_
     int status;
     wait(&status);
   }
-  // write(1, "child return\n", 13);
+  
   close(up_pipe_fds[0]);
   exit(0);
 }
