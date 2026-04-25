@@ -1,0 +1,10 @@
+# clangd needs permission to query cross-GCC for system includes (-nostdlib freestanding).
+# Adjust paths if your toolchain lives elsewhere (see `which riscv64-unknown-elf-gcc`).
+CompileFlags:
+  # -mcmodel=medany is for RISC-V bare-metal (Makefile); Apple Clang rejects it on arm64-mac.
+  Remove: [-mno-relax, -mcmodel=medany]
+
+QueryDriver:
+  - .*/riscv64-unknown-elf-gcc
+  - .*/riscv64-linux-gnu-gcc
+  - .*/riscv64-unknown-linux-gnu-gcc
